@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grupprecept</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+    header {
+      padding: 24px;
+      text-align: center;
+      border-bottom: 1px solid #334155;
+      background: #111827;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+    header p {
+      margin: 8px 0 0;
+      color: #94a3b8;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .column {
+      background: #111827;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+    .column h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 24px;
+    }
+    .recipe-list {
+      display: grid;
+      gap: 16px;
+    }
+    .recipe-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .recipe-card:hover {
+      transform: translateY(-2px);
+      border-color: #60a5fa;
+    }
+    .recipe-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      background: #0b1220;
+    }
+    .recipe-card .content {
+      padding: 14px;
+    }
+    .recipe-card h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+    .recipe-card p {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+    dialog {
+      width: min(900px, 92vw);
+      border: 1px solid #334155;
+      border-radius: 18px;
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 0;
+    }
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.72);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid #334155;
+      background: #111827;
+      gap: 12px;
+    }
+    .modal-header h3 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .close-btn {
+      border: none;
+      border-radius: 10px;
+      background: #334155;
+      color: white;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+    .modal-body {
+      padding: 20px;
+    }
+    .modal-body img {
+      width: 100%;
+      max-height: 320px;
+      object-fit: cover;
+      border-radius: 14px;
+      margin-bottom: 18px;
+      display: block;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      font-size: 16px;
+      margin: 0;
+      color: #f8fafc;
+      background: #111827;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 18px;
+    }
+    .loading, .error {
+      color: #cbd5e1;
+      font-size: 15px;
+    }
+    .error { color: #fca5a5; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Grupprecept</h1>
+    <p>Svenska och ukrainska recept i en enkel receptsamling</p>
+  </header>
+
+  <main class="container">
+    <section class="columns">
+      <article class="column">
+        <h2>Svenska recept</h2>
+        <div class="recipe-list" id="svenska-list"></div>
+      </article>
+
+      <article class="column">
+        <h2>Ukrainska recept</h2>
+        <div class="recipe-list" id="ukrainska-list"></div>
+      </article>
+    </section>
+  </main>
+
+  <dialog id="recipeModal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Recept</h3>
+      <button class="close-btn" onclick="document.getElementById('recipeModal').close()">Stäng</button>
+    </div>
+    <div class="modal-body">
+      <img id="modalImage" src="" alt="Receptbild" />
+      <div id="modalContent" class="loading">Laddar recept...</div>
+    </div>
+  </dialog>
+
+  <script>
+    const recipes = {
+      svenska: [
+        {
+          title: 'Köttbullar med spaghetti',
+          description: 'Ett enkelt svenskt recept med köttbullar, pasta och sås.',
+          file: 'svenska/köttbullarmedspaghetti.txt',
+          image: 'images/kottbullar.jpg'
+        },
+        {
+          title: 'Pasta med pesto',
+          description: 'Snabb pasta med pesto och enkel tillagning.',
+          file: 'svenska/pastamedpesto.txt',
+          image: 'images/pesto.jpg'
+        }
+      ],
+      ukrainska: [
+        {
+          title: 'Ukrainsk borsjtj',
+          description: 'En traditionell ukrainsk soppa med rödbetor och grönsaker.',
+          file: 'ukrainska/ukrainsk_borsjtj.txt',
+          image: 'images/borsjtj.jpg'
+        },
+        {
+          title: 'Ukrainska varenyky',
+          description: 'Klassiska ukrainska dumplings med potatisfyllning.',
+          file: 'ukrainska/ukrainska_varenyky.txt',
+          image: 'images/varenyky.jpg'
+        }
+      ]
+    };
+
+    function createCard(recipe) {
+      const card = document.createElement('div');
+      card.className = 'recipe-card';
+      card.innerHTML = `
+        <img src="${recipe.image}" alt="${recipe.title}">
+        <div class="content">
+          <h3>${recipe.title}</h3>
+          <p>${recipe.description}</p>
+        </div>
+      `;
+      card.addEventListener('click', () => openRecipe(recipe));
+      return card;
+    }
+
+    function renderRecipes() {
+      const svenskaList = document.getElementById('svenska-list');
+      const ukrainskaList = document.getElementById('ukrainska-list');
+
+      recipes.svenska.forEach(recipe => svenskaList.appendChild(createCard(recipe)));
+      recipes.ukrainska.forEach(recipe => ukrainskaList.appendChild(createCard(recipe)));
+    }
+
+    async function openRecipe(recipe) {
+      const modal = document.getElementById('recipeModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalImage = document.getElementById('modalImage');
+      const modalContent = document.getElementById('modalContent');
+
+      modalTitle.textContent = recipe.title;
+      modalImage.src = recipe.image;
+      modalImage.alt = recipe.title;
+      modalContent.className = 'loading';
+      modalContent.textContent = 'Laddar recept...';
+      modal.showModal();
+
+      try {
+        const response = await fetch(recipe.file);
+        if (!response.ok) {
+          throw new Error('Kunde inte läsa filen');
+        }
+        const text = await response.text();
+        modalContent.className = '';
+        modalContent.innerHTML = `<pre>${escapeHtml(text)}</pre>`;
+      } catch (error) {
+        modalContent.className = 'error';
+        modalContent.textContent = 'Det gick inte att öppna receptet.';
+      }
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    renderRecipes();
+  </script>
+</body>
+</html>
+
