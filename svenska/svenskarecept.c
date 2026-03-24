@@ -25,6 +25,7 @@ int main(){
 		printf(GRON "En portion köttbullar med spaghetti och pastasås\n" RESET);	
 		printf("\n");
 		printf("Ingridienser:\n");
+		printf("\n");
 		printf("Frysta ekoligska köttbullar\n");
 		printf("Barilla Classico pastasås 400g\n");
 		printf("Spaghetti\n");
@@ -47,6 +48,7 @@ int main(){
 		printf(BLA "Två portioner köttbullar med spaghetti och pastasås\n" RESET);
 		printf("\n");
 		printf("Ingridienser:\n");
+		printf("\n");
 		printf("Frysta ekoligska köttbullar\n");
         	printf("Barilla Classico pastasås 400g\n");
         	printf("Spaghetti\n");
@@ -55,6 +57,7 @@ int main(){
         	printf("Salt\n");
         	printf("\n");
         	printf("Tillagning:\n");
+		printf("\n");
         	printf("- Koka upp 750ml vatten, tillsätt salt och valfri mängd spaghetti och låt koka i 7-8 minuter.\n");
         	printf("- Stek 18st köttbullar i 15 minuter med smör i en stekpanna på medelhög värme.\n");
         	printf("- Häll ur vattnet ur kastrullen och servera pastan, tillsätt drygt två tredjedelar pastasås.\n");
