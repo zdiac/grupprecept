@@ -1,18 +1,28 @@
 #include <stdio.h>
 
+#define RESET   "\033[0m"
+#define ROD     "\033[31m"
+#define GRON    "\033[32m"
+#define GUL     "\033[33m"
+#define BLA     "\033[34m"
+#define FET     "\033[1m"
+
+
 int main(){
 	int val;
 
-		printf("Recept: Köttbullar med pastasås och spaghetti\n");
+		printf("\n");
+		printf(GUL "Recept: Köttbullar med pastasås och spaghetti\n" RESET);
 		printf("Hur många portioner ska du laga? Skriv siffran 1 eller 2:\n");
-    		printf("1 = En portion \n");
-    		printf("2 = Två portioner\n");
+    		printf(GRON "1 = En portion \n" RESET);
+    		printf(BLA "2 = Två portioner\n"RESET);
     		printf("Ditt val: ");
 	
 	scanf("%d", &val);
 
 	if (val == 1) {
-        	printf("En portioner köttbullar med spaghetti och pastasås\n");	
+        	printf("\n");
+		printf(GRON "En portion köttbullar med spaghetti och pastasås\n" RESET);	
 		printf("\n");
 		printf("Ingridienser:\n");
 		printf("Frysta ekoligska köttbullar\n");
@@ -30,9 +40,11 @@ int main(){
 		printf("- Tillsätt valfri mängd spenat.\n");
 		printf("- Tillsätt köttbullarna.\n");
 		printf("- Lägg till valfri mängd ketchup på köttbullarna.\n");
+		printf("\n");
 }
 	else if (val == 2) {
-		printf("Två portioner \n");
+		printf("\n");
+		printf(BLA "Två portioner köttbullar med spaghetti och pastasås\n" RESET);
 		printf("\n");
 		printf("Ingridienser:\n");
 		printf("Frysta ekoligska köttbullar\n");
@@ -50,10 +62,12 @@ int main(){
         	printf("- Tillsätt valfri mängd spenat.\n");
         	printf("- Tillsätt köttbullarna.\n");
         	printf("- Lägg till valfri mängd ketchup på köttbullarna.\n");
-
+		printf("\n");
 }
  	else {
-        	printf("Ogiltigt val. Starta om programmet.\n");
+		printf("\n");
+        	printf(ROD "Ogiltigt val. Starta om programmet.\n" RESET);
+		printf("\n");
     }
 
 
